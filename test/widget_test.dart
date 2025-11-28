@@ -176,4 +176,31 @@ void main() {
       expect(find.text('Note: Lots of lettuce'), findsOneWidget);
     });
   });
+
+  group('OrderScreen - Confirmation Message', () {
+    testWidgets('shows confirmation SnackBar when sandwich is added',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Add to Cart'));
+      await tester.pump();
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(find.textContaining('Added'), findsOneWidget);
+    });
+  });
+
+  group('OrderScreen - Permanent Cart Summary', () {
+    testWidgets('shows cart summary with items and total',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      // Initially, cart is empty
+      expect(find.textContaining('Items in cart:'), findsOneWidget);
+      expect(find.textContaining('Total:'), findsOneWidget);
+      // Add a sandwich
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Add to Cart'));
+      await tester.pump();
+      // Cart summary should update
+      expect(find.textContaining('Items in cart:'), findsOneWidget);
+      expect(find.textContaining('Total:'), findsOneWidget);
+    });
+  });
 }
